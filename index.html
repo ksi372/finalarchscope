@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ArchScope — AI Building Analysis</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{--primary:#667eea;--primary2:#764ba2;--bg:#0f1220;--card:#14182b;--muted:#a7adcf}
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:radial-gradient(1200px 800px at 10% -10%, rgba(118,75,162,.25), transparent 60%), radial-gradient(1000px 800px at 110% 10%, rgba(102,126,234,.25), transparent 60%), #0c0f1e;color:#e8ebff}
+    .container{max-width:1100px;margin:0 auto;padding:24px}
+    .center{min-height:70vh;display:flex;flex-direction:column;align-items:center;justify-content:center}
+    .hero{margin:0 0 16px;display:flex;gap:16px;align-items:center;justify-content:center}
+    .logo{display:flex;align-items:center;justify-content:center;width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,rgba(102,126,234,.25),rgba(118,75,162,.25));border:1px solid rgba(255,255,255,.08);box-shadow:0 10px 28px rgba(102,126,234,.25)}
+    .title{font-size:28px;font-weight:800;background:linear-gradient(90deg,var(--primary),var(--primary2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:0 0 2px}
+    .subtitle{margin:0;color:#b8bde8}
+    .searchCard{margin:0 auto;width:650px;max-width:100%;background:transparent;border:none;padding:0 8px}
+    .searchRow{display:flex;gap:10px;align-items:center;background:#0c1326;border:1px solid rgba(255,255,255,.10);border-radius:22px;padding:12px 14px;box-shadow:0 8px 30px rgba(0,0,0,.35);height:92px}
+    .input{flex:1;background:transparent;border:none;height:100%;color:#e8ebff;padding:0 18px;font-size:18px;outline:none}
+    .input::placeholder{color:#8d95c9}
+    .input:focus{outline:none}
+    .btn{height:56px;padding:0 24px;border:none;border-radius:16px;background:linear-gradient(90deg,var(--primary),var(--primary2));color:#fff;font-weight:800;cursor:pointer;box-shadow:0 12px 30px rgba(102,126,234,.30)}
+    .btn:hover{filter:brightness(1.06)}
+    .icon-btn{min-width:56px;width:56px;height:56px;display:flex;align-items:center;justify-content:center;padding:0;border:none;border-radius:14px;background:#22d3ee;color:#0b1220;box-shadow:0 10px 24px rgba(34,211,238,.35);cursor:pointer}
+    @media (max-width:720px){
+      .searchCard{width:100%;}
+      .searchRow{height:auto}
+      .input{height:56px}
+    }
+    .icon-btn:hover{filter:brightness(1.05)}
+    .btn:disabled{opacity:.6;cursor:not-allowed}
+    .row{display:flex;gap:12px;margin-top:12px;align-items:center;flex-wrap:wrap;position:relative}
+    .uploader{position:relative;display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px dashed rgba(255,255,255,.18);border-radius:12px;background:#0f1428;color:#cdd3ff}
+    .file{display:none}
+    .dropdown{position:relative}
+    .dd-btn{height:42px;padding:0 14px;border:1px solid rgba(255,255,255,.12);border-radius:12px;background:#0f1428;color:#cdd3ff;cursor:pointer}
+    .dd-menu{position:absolute;top:48px;left:0;background:#0f1428;border:1px solid rgba(255,255,255,.12);border-radius:12px;min-width:320px;box-shadow:0 10px 30px rgba(0,0,0,.4);z-index:10;display:none;max-height:280px;overflow:auto}
+    .dd-item{display:block;width:100%;text-align:left;padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.06);color:#cdd3ff;background:transparent;cursor:pointer}
+    .dd-item:hover{background:#121a37}
+    .results{margin:24px auto;max-width:900px;display:none}
+    .card{background:#0f1428;border:1px solid rgba(255,255,255,.08);border-radius:22px;padding:24px;box-shadow:0 14px 40px rgba(0,0,0,.45)}
+    .meta{display:flex;align-items:center;gap:10px;color:#9aa3da;font-size:13px;margin-bottom:12px}
+    .prose{color:#e8ebff;line-height:1.75;font-size:16px}
+    .prose h1,.prose h2,.prose h3{margin:18px 0 10px;color:#dbe0ff}
+    .prose p{margin:10px 0}
+    .prose strong{color:#ffffff}
+    .prose ul{padding-left:22px}
+    .prose li{margin:6px 0}
+    .issue{background:#17110a;border-left:4px solid #ffb020;padding:10px;border-radius:10px;margin:10px 0}
+    .rec{background:#0c2130;border-left:4px solid #27c1ff;padding:10px;border-radius:10px;margin:10px 0}
+    .footer{margin:40px 0;color:#9aa3da;text-align:center}
+    .hidden{display:none}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="center">
+    <div class="hero">
+      <div class="logo">
+        <svg width="28" height="28" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="g" x1="0" y1="0" x2="48" y2="48">
+              <stop stop-color="#667eea"/>
+              <stop offset="1" stop-color="#764ba2"/>
+            </linearGradient>
+          </defs>
+          <path d="M8 36 L24 8 L40 36" stroke="url(#g)" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+          <path d="M14 28 H34" stroke="#9fb0ff" stroke-width="3" stroke-linecap="round"/>
+          <path d="M10 36 H38" stroke="#bfc8ff" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div>
+        <h1 class="title">ArchScope</h1>
+       
+      </div>
+    </div>
+
+    <div class="searchCard">
+      <div class="searchRow">
+        <input id="query" class="input" type="text" placeholder="Ask anything about your building (press Enter)…" />
+        <button id="go" class="icon-btn" aria-label="Search">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="11" cy="11" r="7" stroke="#0b1220" stroke-width="2"/>
+            <path d="M20 20l-3.5-3.5" stroke="#0b1220" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+      <div class="row">
+        <label class="uploader">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 16V7m0 0l-3 3m3-3l3 3" stroke="#cdd3ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 16.5a4.5 4.5 0 00-4.5-4.5h-1A5.5 5.5 0 109 17h7" stroke="#cdd3ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span id="fileLabel">Attach image (optional)</span>
+          <input id="file" class="file" type="file" accept="image/png,image/jpeg" />
+        </label>
+        <div class="dropdown">
+          <button id="ddBtn" class="dd-btn">Suggestions ▾</button>
+          <div id="ddMenu" class="dd-menu">
+            <button class="dd-item" data-q="foundation cracks near drainage">Foundation cracks near drainage</button>
+            <button class="dd-item" data-q="roof flashing and ventilation issues">Roof flashing and ventilation issues</button>
+            <button class="dd-item" data-q="electrical panel code compliance">Electrical panel code compliance</button>
+            <button class="dd-item" data-q="uneven flooring and drywall seams">Uneven flooring and drywall seams</button>
+            <button class="dd-item" data-q="is rebar placement adequate for this span?">Rebar placement adequacy</button>
+            <button class="dd-item" data-q="any safety risks for workers visible here?">Visible safety risks</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+
+    <div id="results" class="results">
+      <div class="card" id="resultCard">
+        <div class="meta"><span>Gemini 2.0 Flash</span><span>•</span><span id="ts"></span></div>
+        <div id="status" class="sectionTitle hidden">Working…</div>
+        <div id="markdown" class="prose"></div>
+      </div>
+    </div>
+
+    
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script>
+    // CONFIG — you asked to hardcode for test use
+    const GEMINI_API_KEY = "AIzaSyD9AqMnpmyZ2bd3tcRstyvT0F_FbqCxRAg";
+    const ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
+
+    const qs = (s)=>document.querySelector(s);
+    const queryEl = qs('#query');
+    const goEl = qs('#go');
+    const fileEl = qs('#file');
+    const fileLabel = qs('#fileLabel');
+    const results = qs('#results');
+    const statusEl = qs('#status');
+    const mdEl = qs('#markdown');
+    const tsEl = qs('#ts');
+
+    // Suggestions dropdown
+    const ddBtn = qs('#ddBtn');
+    const ddMenu = qs('#ddMenu');
+    ddBtn.addEventListener('click',()=>{
+      ddMenu.style.display = ddMenu.style.display==='block' ? 'none' : 'block';
+    });
+    ddMenu.addEventListener('click',(e)=>{
+      if(e.target.matches('.dd-item')){
+        queryEl.value = e.target.dataset.q;
+        ddMenu.style.display = 'none';
+        queryEl.focus();
+      }
+    });
+    document.addEventListener('click',(e)=>{
+      if(!ddMenu.contains(e.target) && !ddBtn.contains(e.target)) ddMenu.style.display='none';
+    });
+
+    fileEl.addEventListener('change',()=>{
+      const f = fileEl.files[0];
+      fileLabel.textContent = f ? `Attached: ${f.name}` : 'Attach image (optional)';
+    });
+
+    queryEl.addEventListener('keydown',(e)=>{ if(e.key==='Enter'){ e.preventDefault(); goEl.click(); }});
+    goEl.addEventListener('click', runAnalysis);
+
+    async function runAnalysis(){
+      const userQuery = (queryEl.value || '').trim();
+      if(!userQuery && fileEl.files.length === 0){
+        queryEl.focus();
+        queryEl.placeholder = 'Please enter a question or attach an image';
+        return;
+      }
+
+      setBusy(true);
+      mdEl.innerHTML = '';
+
+      try{
+        const parts = [ { text: buildPrompt(userQuery) } ];
+
+        if(fileEl.files.length){
+          const file = fileEl.files[0];
+          const { dataUrl, mime } = await toBase64Compressed(file, 1600, 0.85);
+          parts.push({ inline_data: { mime_type: mime, data: dataUrl.split(',')[1] }});
+        }
+
+        const payload = { contents: [{ parts }] };
+        const controller = new AbortController();
+        const timeoutId = setTimeout(()=>controller.abort(), 60000);
+        const res = await fetch(ENDPOINT, {
+          method:'POST', headers:{ 'Content-Type':'application/json' }, body: JSON.stringify(payload), signal: controller.signal
+        });
+        clearTimeout(timeoutId);
+        if(!res.ok){ throw new Error(`API error ${res.status}`); }
+        const data = await res.json();
+
+        const text = data?.candidates?.[0]?.content?.parts?.map(p=>p.text).join('\n') || 'No response.';
+        renderMarkdown(text);
+      }catch(err){
+        statusEl.classList.remove('hidden');
+        statusEl.textContent = `Error: ${err.message}`;
+      }finally{
+        setBusy(false);
+      }
+    }
+
+    function buildPrompt(query){
+      return `System: You are an expert building inspector. Use BOTH the user's text and any attached image.\n\n`+
+      `Classify which construction stage best matches (one of: Foundation & Sitework, Framing & Structure, Electrical Systems, Plumbing Systems, Roofing & Insulation, Interior Finishing).\n`+
+      `Output the first line as: Detected Stage: <stage>.\n\n`+
+      `Then provide a detailed analysis with:\n`+
+      `1) Overall Assessment\n`+
+      `2) Detected Deficiencies with severity (Low/Medium/High/Critical)\n`+
+      `3) Remediation Recommendations\n`+
+      `4) Compliance Status (code/safety)\n\n`+
+      `User Emphasis: ${query || 'General stage-specific assessment'}\n`+
+      `Return well-structured sections with clear Markdown headings.`;
+    }
+
+    function setBusy(b){
+      goEl.disabled = b;
+      results.style.display = 'block';
+      statusEl.classList.remove('hidden');
+      statusEl.textContent = b ? 'Analyzing with Gemini…' : '';
+      if(!b) statusEl.classList.add('hidden');
+      tsEl.textContent = new Date().toLocaleTimeString();
+    }
+
+    function renderMarkdown(text){
+      mdEl.innerHTML = marked.parse(text || '');
+    }
+
+    async function toBase64Compressed(file, maxDim=1600, quality=0.85){
+      const dataUrl = await new Promise((resolve,reject)=>{
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+      // Draw to canvas to downscale
+      const img = new Image();
+      img.src = dataUrl;
+      await img.decode();
+      const scale = Math.min(1, maxDim / Math.max(img.width, img.height));
+      const w = Math.max(1, Math.round(img.width * scale));
+      const h = Math.max(1, Math.round(img.height * scale));
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, w, h);
+      const mime = (file.type && file.type !== 'image/png') ? 'image/jpeg' : file.type || 'image/jpeg';
+      const out = canvas.toDataURL(mime, quality);
+      return { dataUrl: out, mime };
+    }
+  </script>
+</body>
+</html>
+
