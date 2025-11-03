@@ -76,9 +76,26 @@
     .solution-content{color:#aaddff;line-height:1.7}
     .logout-btn{position:fixed;top:20px;right:20px;padding:8px 16px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:10px;color:#cdd3ff;font-size:14px;font-weight:500;cursor:pointer;transition:all 0.2s;z-index:100}
     .logout-btn:hover{background:rgba(255,255,255,.12);color:#ffffff}
+    .solutions-modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(12,15,30,.95);backdrop-filter:blur(8px);display:none;align-items:flex-start;justify-content:center;z-index:2000;overflow-y:auto;padding:40px 20px}
+    .solutions-modal.active{display:flex}
+    .solutions-modal-content{background:#0f1428;border:1px solid rgba(255,255,255,.12);border-radius:24px;padding:32px;max-width:900px;width:100%;box-shadow:0 20px 50px rgba(0,0,0,.6);margin:auto;position:relative}
+    .close-btn{position:absolute;top:16px;right:16px;width:36px;height:36px;border:none;background:rgba(255,255,255,.08);border-radius:8px;color:#cdd3ff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+    .close-btn:hover{background:rgba(255,255,255,.15);color:#ffffff}
     .download-btn{display:inline-flex;align-items:center;padding:12px 24px;background:linear-gradient(90deg,var(--primary),var(--primary2));color:#fff;border:none;border-radius:12px;font-weight:600;cursor:pointer;box-shadow:0 8px 20px rgba(102,126,234,.3);transition:all 0.2s}
     .download-btn:hover{filter:brightness(1.1);transform:translateY(-1px);box-shadow:0 10px 24px rgba(102,126,234,.4)}
     .stage-badge{display:inline-block;padding:6px 12px;background:rgba(102,126,234,.2);border:1px solid rgba(102,126,234,.4);border-radius:8px;color:#9fb0ff;font-size:13px;font-weight:600;margin-left:10px}
+    .sidebar{position:fixed;left:0;top:0;bottom:0;width:260px;background:#0f1428;border-right:1px solid rgba(255,255,255,.08);display:flex;flex-direction:column;z-index:50;overflow:hidden}
+    .sidebar-header{padding:16px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:12px}
+    .sidebar-logo{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,rgba(102,126,234,.3),rgba(118,75,162,.3));display:flex;align-items:center;justify-content:center}
+    .sidebar-title{font-weight:700;font-size:16px;color:#e8ebff}
+    .new-chat-btn{width:calc(100% - 32px);margin:12px 16px;padding:12px;background:rgba(102,126,234,.15);border:1px solid rgba(102,126,234,.3);border-radius:10px;color:#9fb0ff;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all 0.2s}
+    .new-chat-btn:hover{background:rgba(102,126,234,.25);color:#b8c5ff}
+    .chat-history{padding:8px 0;flex:1;overflow-y:auto}
+    .chat-item{padding:12px 16px;cursor:pointer;color:#cdd3ff;font-size:14px;border-left:3px solid transparent;transition:all 0.2s;display:flex;align-items:center;gap:10px;max-width:100%;overflow:hidden}
+    .chat-item:hover{background:rgba(255,255,255,.05);border-left-color:rgba(102,126,234,.5)}
+    .chat-item.active{background:rgba(102,126,234,.15);border-left-color:var(--primary);color:#ffffff}
+    .chat-item-text{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .main-with-sidebar{margin-left:260px}
   </style>
 </head>
 <body>
@@ -92,6 +109,35 @@
     </div>
   </div>
   <div id="mainContent" class="main-content">
+  <!-- Sidebar -->
+  <div id="sidebar" class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <svg width="20" height="20" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="sidebarG" x1="0" y1="0" x2="48" y2="48">
+              <stop stop-color="#667eea"/>
+              <stop offset="1" stop-color="#764ba2"/>
+            </linearGradient>
+          </defs>
+          <path d="M8 36 L24 8 L40 36" stroke="url(#sidebarG)" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+          <path d="M14 28 H34" stroke="#9fb0ff" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="sidebar-title">ArchScope</div>
+    </div>
+    <button id="newChatBtn" class="new-chat-btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 4v16m8-8H4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      New Chat
+    </button>
+    <div class="chat-history" id="chatHistory">
+      <!-- Chat items will be inserted here -->
+    </div>
+  </div>
+  
+  <div class="main-with-sidebar">
   <button id="logoutBtn" class="logout-btn">Logout</button>
   <div class="container">
     <div class="center">
@@ -155,8 +201,33 @@
           <span id="stageBadge" class="stage-badge hidden"></span>
         </div>
         <div id="status" class="sectionTitle hidden">Working…</div>
-        <div id="markdown" class="prose"></div>
-        <div id="downloadSection" class="hidden" style="margin-top:24px;padding-top:24px;border-top:1px solid rgba(255,255,255,.1);text-align:center">
+        <div id="overviewSection" class="prose"></div>
+        <div id="deficienciesSection"></div>
+        <div id="viewSolutionBtnWrapper" class="hidden" style="margin-top:24px;text-align:center">
+          <button id="viewSolutionBtn" class="download-btn" style="width:auto;padding:14px 32px">
+            <span>View Solutions</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-left:8px;transform:rotate(-90deg)">
+              <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+      
+    </div>
+
+    <!-- Solutions Modal -->
+    <div id="solutionsModal" class="solutions-modal">
+      <div class="solutions-modal-content">
+        <button id="closeSolutionsBtn" class="close-btn" aria-label="Close">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div class="meta" style="margin-bottom:24px">
+          <span style="font-size:24px;font-weight:700">Remediation Solutions</span>
+        </div>
+        <div id="solutionsSection"></div>
+        <div id="downloadSection" style="margin-top:32px;padding-top:24px;border-top:1px solid rgba(255,255,255,.1);text-align:center">
           <button id="downloadBtn" class="download-btn">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right:8px">
               <path d="M12 15V3m0 0L9 6m3-3l3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -167,9 +238,12 @@
         </div>
       </div>
     </div>
+  </div>
 
     
     </div>
+  </div>
+  </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -229,21 +303,129 @@
       // Clear form fields
       loginUser.value = '';
       loginPass.value = '';
+      // Reset chat state
+      currentChatId = null;
+      currentAnalysisText = '';
     });
     
+    const sidebar = qs('#sidebar');
+    const chatHistory = qs('#chatHistory');
+    const newChatBtn = qs('#newChatBtn');
     const queryEl = qs('#query');
     const goEl = qs('#go');
     const fileEl = qs('#file');
     const fileLabel = qs('#fileLabel');
     const results = qs('#results');
     const statusEl = qs('#status');
-    const mdEl = qs('#markdown');
+    const overviewSection = qs('#overviewSection');
+    const deficienciesSection = qs('#deficienciesSection');
+    const solutionsSection = qs('#solutionsSection');
+    const viewSolutionBtnWrapper = qs('#viewSolutionBtnWrapper');
+    const viewSolutionBtn = qs('#viewSolutionBtn');
+    const solutionsModal = qs('#solutionsModal');
+    const closeSolutionsBtn = qs('#closeSolutionsBtn');
     const tsEl = qs('#ts');
     const downloadSection = qs('#downloadSection');
     const downloadBtn = qs('#downloadBtn');
     const stageBadge = qs('#stageBadge');
     
     let currentAnalysisText = '';
+    let currentChatId = null;
+    let conversations = JSON.parse(localStorage.getItem('archscope_conversations') || '[]');
+    
+    // Conversation management
+    function saveConversation(chatId, query, text, timestamp){
+      // Generate title from query or extract from analysis
+      let title = query || '';
+      if(!title || title.length < 3){
+        // Try to extract from first deficiency or section
+        const defMatch = text.match(/(?:Deficiency|Problem|Issue)\s*\d+[:\-]\s*([^\n(*]+)/i);
+        if(defMatch){
+          title = defMatch[1].trim().substring(0, 50);
+        } else {
+          title = text.substring(0, 50).trim();
+        }
+      }
+      if(title.length > 50) title = title.substring(0, 47) + '...';
+      if(!title) title = 'New Analysis';
+      
+      const chat = {
+        id: chatId,
+        title: title,
+        query: query,
+        analysis: text,
+        timestamp: timestamp || new Date().toISOString()
+      };
+      
+      // Remove existing if updating
+      conversations = conversations.filter(c => c.id !== chatId);
+      // Add to beginning
+      conversations.unshift(chat);
+      // Keep only last 50 conversations
+      conversations = conversations.slice(0, 50);
+      localStorage.setItem('archscope_conversations', JSON.stringify(conversations));
+      renderChatHistory();
+    }
+    
+    function renderChatHistory(){
+      chatHistory.innerHTML = '';
+      conversations.forEach(chat => {
+        const item = document.createElement('div');
+        item.className = 'chat-item' + (chat.id === currentChatId ? ' active' : '');
+        item.innerHTML = `<span class="chat-item-text">${chat.title}</span>`;
+        item.addEventListener('click', () => loadConversation(chat.id));
+        chatHistory.appendChild(item);
+      });
+    }
+    
+    function loadConversation(chatId){
+      const chat = conversations.find(c => c.id === chatId);
+      if(!chat) return;
+      
+      currentChatId = chatId;
+      currentAnalysisText = chat.analysis;
+      
+      // Clear and populate sections
+      overviewSection.innerHTML = '';
+      deficienciesSection.innerHTML = '';
+      solutionsSection.innerHTML = '';
+      
+      // Re-render the analysis
+      renderMarkdown(chat.analysis);
+      
+      // Set query if available
+      if(chat.query) queryEl.value = chat.query;
+      
+      // Show results
+      results.style.display = 'block';
+      
+      // Update active state
+      renderChatHistory();
+      
+      // Scroll to top
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    
+    function startNewChat(){
+      currentChatId = 'chat_' + Date.now();
+      queryEl.value = '';
+      fileEl.value = '';
+      fileLabel.textContent = 'Attach image (optional)';
+      overviewSection.innerHTML = '';
+      deficienciesSection.innerHTML = '';
+      solutionsSection.innerHTML = '';
+      viewSolutionBtnWrapper.classList.add('hidden');
+      solutionsModal.classList.remove('active');
+      results.style.display = 'none';
+      currentAnalysisText = '';
+      renderChatHistory();
+      queryEl.focus();
+    }
+    
+    newChatBtn.addEventListener('click', startNewChat);
+    
+    // Load chat history on page load
+    renderChatHistory();
 
     // Suggestions dropdown
     const ddBtn = qs('#ddBtn');
@@ -270,6 +452,32 @@
     queryEl.addEventListener('keydown',(e)=>{ if(e.key==='Enter'){ e.preventDefault(); goEl.click(); }});
     goEl.addEventListener('click', runAnalysis);
     
+    viewSolutionBtn.addEventListener('click', ()=>{
+      solutionsModal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    });
+    
+    closeSolutionsBtn.addEventListener('click', ()=>{
+      solutionsModal.classList.remove('active');
+      document.body.style.overflow = '';
+    });
+    
+    // Close modal when clicking outside
+    solutionsModal.addEventListener('click', (e)=>{
+      if(e.target === solutionsModal){
+        solutionsModal.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    });
+    
+    // Close modal with ESC key
+    document.addEventListener('keydown', (e)=>{
+      if(e.key === 'Escape' && solutionsModal.classList.contains('active')){
+        solutionsModal.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    });
+    
     downloadBtn.addEventListener('click', ()=>{
       if(!currentAnalysisText) return;
       const blob = new Blob([currentAnalysisText], { type: 'text/plain' });
@@ -292,9 +500,18 @@
         return;
       }
 
+      // Create new chat ID if starting new conversation
+      if(!currentChatId){
+        currentChatId = 'chat_' + Date.now();
+      }
+
       setBusy(true);
-      mdEl.innerHTML = '';
-      downloadSection.classList.add('hidden');
+      overviewSection.innerHTML = '';
+      deficienciesSection.innerHTML = '';
+      solutionsSection.innerHTML = '';
+      viewSolutionBtnWrapper.classList.add('hidden');
+      solutionsModal.classList.remove('active');
+      document.body.style.overflow = '';
       stageBadge.classList.add('hidden');
       currentAnalysisText = '';
 
@@ -332,11 +549,12 @@
         }
         
         renderMarkdown(text);
-        downloadSection.classList.remove('hidden');
+        
+        // Save conversation to history
+        saveConversation(currentChatId, userQuery, text);
       }catch(err){
         statusEl.classList.remove('hidden');
         statusEl.textContent = `Error: ${err.message}`;
-        downloadSection.classList.add('hidden');
       }finally{
         setBusy(false);
       }
@@ -390,19 +608,27 @@
     function renderMarkdown(text){
       if(!text) return;
       
-      // Parse text to extract problems and solutions
-      const html = marked.parse(text);
-      let output = '';
+      let overviewHtml = '';
+      let deficienciesHtml = '';
+      let solutionsHtml = '';
       
       // Split by major sections (handle both ## and ###)
       const sectionRegex = /(?:^|\n)(##?\s+[^\n]+)/g;
       const matches = [...text.matchAll(sectionRegex)];
       
       if(matches.length === 0){
-        // No sections found, render as normal
-        output = marked.parse(text);
+        // No sections found, render all as overview
+        overviewHtml = marked.parse(text);
       } else {
-        let lastIdx = 0;
+        let beforeFirstSection = '';
+        let defSectionContent = null;
+        let solSectionContent = null;
+        
+        // Get content before first section
+        if(matches[0].index > 0){
+          beforeFirstSection = text.substring(0, matches[0].index);
+        }
+        
         for(let i = 0; i < matches.length; i++){
           const match = matches[i];
           const sectionStart = match.index + match[0].indexOf(match[1]);
@@ -411,154 +637,32 @@
           const title = match[1].replace(/^##?\s+/, '').trim();
           const content = sectionText.replace(/^##?\s+[^\n]+\n*/, '').trim();
           
-          // Render everything before first section
-          if(i === 0 && sectionStart > 0){
-            output += marked.parse(text.substring(0, sectionStart));
+          // Check if this is the overview/assessment section
+          if(title.toLowerCase().includes('overall') || title.toLowerCase().includes('assessment')){
+            overviewHtml += marked.parse(sectionText);
           }
-          
           // Check if this is the deficiencies/problems section
-          if(title.toLowerCase().includes('deficiency') || title.toLowerCase().includes('problem') || title.toLowerCase().includes('issue')){
-            if(content){
-              // Parse deficiencies line by line - look for patterns like "* **Deficiency 1:" or "* Deficiency 1:"
-              const lines = content.split('\n');
-              let deficiencies = [];
-              let currentDef = null;
-              
-              lines.forEach((line) => {
-                const trimmed = line.trim();
-                
-                // Check if this line starts a new deficiency - look for patterns like:
-                // "* **Deficiency 1:", "* Deficiency 1:", "**Deficiency 1:", "Deficiency 1:"
-                const defPattern = /^(?:\*\s*)?\*?\*?(?:Deficiency|Problem|Issue)\s*\d+[:\-]/i;
-                
-                if(defPattern.test(trimmed)){
-                  // Save previous deficiency if exists
-                  if(currentDef){
-                    deficiencies.push(currentDef);
-                  }
-                  // Start new deficiency
-                  currentDef = trimmed;
-                } else if(currentDef){
-                  // Continue adding to current deficiency (all sub-items)
-                  currentDef += '\n' + trimmed;
-                } else if(trimmed.length > 0 && /deficiency|problem|issue|severity|location/i.test(trimmed)){
-                  // Start accumulating if we see deficiency-related content
-                  currentDef = trimmed;
-                }
-              });
-              
-              // Don't forget the last one
-              if(currentDef){
-                deficiencies.push(currentDef);
-              }
-              
-              // Clean and filter - ensure we have actual deficiencies
-              deficiencies = deficiencies.map(def => def.trim()).filter(def => {
-                const lower = def.toLowerCase();
-                return def.length > 30 && (
-                  lower.includes('deficiency') || 
-                  lower.includes('severity') || 
-                  lower.includes('location') ||
-                  lower.includes('root cause')
-                );
-              });
-              
-              if(deficiencies.length > 0){
-                deficiencies.forEach((def, idx) => {
-                  const defContent = def.trim();
-                  if(defContent){
-                    // Extract deficiency name - handle formats like:
-                    // "* **Deficiency 1: Name**" or "Deficiency 1: Name (Severity: X)"
-                    let defName = `Deficiency ${idx + 1}`;
-                    
-                    // Try to extract from first line
-                    const firstLine = defContent.split('\n')[0];
-                    // Match: "* **Deficiency 1: Name**" or "Deficiency 1: Name"
-                    const nameMatch = firstLine.match(/(?:Deficiency|Problem|Issue)\s*\d+[:\-]\s*\*?\*?([^*\n(]+?)\*?\*?/i);
-                    if(nameMatch){
-                      defName = nameMatch[1].trim();
-                      // Remove markdown bold markers if any
-                      defName = defName.replace(/\*\*/g, '').trim();
-                    } else {
-                      // Fallback: try without asterisks
-                      const simpleMatch = firstLine.match(/(?:Deficiency|Problem|Issue)\s*\d+[:\-]\s*([^\n(*]+)/i);
-                      if(simpleMatch){
-                        defName = simpleMatch[1].trim();
-                      }
-                    }
-                    
-                    const parsedDef = marked.parse(defContent);
-                    output += `<div class="problem-card"><div class="problem-title">⚠️ ${defName}</div><div class="problem-content">${parsedDef}</div></div>`;
-                  }
-                });
-              } else {
-                // Fallback: single card if no numbered deficiencies found
-                const parsedContent = marked.parse(content);
-                output += `<div class="problem-card"><div class="problem-title">⚠️ ${title}</div><div class="problem-content">${parsedContent}</div></div>`;
-              }
-            }
-            continue;
+          else if(title.toLowerCase().includes('deficiency') || title.toLowerCase().includes('problem') || title.toLowerCase().includes('issue')){
+            defSectionContent = content;
           }
-          
           // Check if this is the solutions/remediation section
-          if(title.toLowerCase().includes('remediation') || title.toLowerCase().includes('solution') || title.toLowerCase().includes('recommendation')){
-            if(content){
-              // Split into individual solutions - look for numbered solutions or "For EACH deficiency"
-              let solutions = content.split(/\n(?=\*\s+\*?\*?(?:Solution|Remediation|Recommendation)\s*\d+[:\-]|For\s+EACH\s+deficiency)/i);
-              
-              // If no matches, try splitting by bullet points
-              if(solutions.length <= 1){
-                solutions = content.split(/\n(?=\*)/).filter(line => 
-                  line.toLowerCase().includes('solution') || 
-                  line.toLowerCase().includes('remediation') ||
-                  line.toLowerCase().includes('recommendation') ||
-                  line.toLowerCase().includes('repair method') ||
-                  line.toLowerCase().includes('required materials')
-                );
-              }
-              
-              solutions = solutions.map(sol => sol.trim()).filter(sol => sol.length > 30);
-              
-              if(solutions.length > 0){
-                solutions.forEach((sol, idx) => {
-                  const solContent = sol.trim();
-                  if(solContent){
-                    // Extract solution name if available
-                    const nameMatch = solContent.match(/(?:Solution|Remediation|Recommendation)\s*\d+[:\-]\s*([^\n(*]+)/i);
-                    const solName = nameMatch ? nameMatch[1].trim() : `Solution ${idx + 1}`;
-                    const parsedSol = marked.parse(solContent);
-                    output += `<div class="solution-card"><div class="solution-title">🔧 ${solName}</div><div class="solution-content">${parsedSol}</div></div>`;
-                  }
-                });
-              } else {
-                // Fallback: single card if no numbered solutions found
-                const parsedContent = marked.parse(content);
-                output += `<div class="solution-card"><div class="solution-title">🔧 ${title}</div><div class="solution-content">${parsedContent}</div></div>`;
-              }
-            }
-            continue;
+          else if(title.toLowerCase().includes('remediation') || title.toLowerCase().includes('solution') || title.toLowerCase().includes('recommendation')){
+            solSectionContent = content;
           }
-          
-          // Other sections render normally
-          output += marked.parse(sectionText);
+          // Other sections (like Compliance) go to overview
+          else {
+            overviewHtml += marked.parse(sectionText);
+          }
         }
-      }
-      
-      // Fallback: if no structured parsing worked, try to find problems/solutions in full text
-      if(!output){
-        const lower = text.toLowerCase();
-        const probIdx = lower.indexOf('deficiency') !== -1 ? lower.indexOf('deficiency') : 
-                       lower.indexOf('problem') !== -1 ? lower.indexOf('problem') : -1;
-        const solIdx = lower.indexOf('remediation') !== -1 ? lower.indexOf('remediation') :
-                      lower.indexOf('solution') !== -1 ? lower.indexOf('solution') : -1;
         
-        if(probIdx !== -1 && solIdx !== -1){
-          const beforeProb = text.substring(0, probIdx);
-          let problemSection = text.substring(probIdx, solIdx);
-          const solutionSection = text.substring(solIdx);
-          
-          // Split problems into individual cards using improved line-by-line parsing
-          const lines = problemSection.split('\n');
+        // Add content before first section to overview
+        if(beforeFirstSection){
+          overviewHtml = marked.parse(beforeFirstSection) + overviewHtml;
+        }
+        
+        // Process deficiencies into red cards
+        if(defSectionContent){
+          const lines = defSectionContent.split('\n');
           let deficiencies = [];
           let currentDef = null;
           
@@ -581,24 +685,11 @@
           deficiencies = deficiencies.map(def => def.trim()).filter(def => {
             const lower = def.toLowerCase();
             return def.length > 30 && (
-              lower.includes('deficiency') || 
-              lower.includes('severity') || 
-              lower.includes('location') ||
-              lower.includes('root cause')
+              lower.includes('deficiency') || lower.includes('severity') || 
+              lower.includes('location') || lower.includes('root cause')
             );
           });
           
-          // Split solutions into individual cards
-          let solutions = solutionSection.split(/\n(?=\*\s+\*?\*?(?:Solution|Remediation|Recommendation)\s*\d+[:\-])/i);
-          if(solutions.length <= 1){
-            solutions = solutionSection.split(/\n(?=\*)/).filter(line => 
-              line.toLowerCase().includes('solution') || line.toLowerCase().includes('remediation'));
-          }
-          solutions = solutions.map(sol => sol.trim()).filter(sol => sol.length > 30);
-          
-          output += marked.parse(beforeProb);
-          
-          // Create individual problem cards
           if(deficiencies.length > 0){
             deficiencies.forEach((def, idx) => {
               let defName = `Deficiency ${idx + 1}`;
@@ -608,33 +699,51 @@
                 defName = nameMatch[1].trim().replace(/\*\*/g, '').trim();
               } else {
                 const simpleMatch = firstLine.match(/(?:Deficiency|Problem|Issue)\s*\d+[:\-]\s*([^\n(*]+)/i);
-                if(simpleMatch){
-                  defName = simpleMatch[1].trim();
-                }
+                if(simpleMatch) defName = simpleMatch[1].trim();
               }
-              output += `<div class="problem-card"><div class="problem-title">⚠️ ${defName}</div><div class="problem-content">${marked.parse(def)}</div></div>`;
+              const parsedDef = marked.parse(def);
+              deficienciesHtml += `<div class="problem-card"><div class="problem-title">⚠️ ${defName}</div><div class="problem-content">${parsedDef}</div></div>`;
             });
           } else {
-            output += `<div class="problem-card"><div class="problem-title">⚠️ Detected Deficiencies</div><div class="problem-content">${marked.parse(problemSection)}</div></div>`;
+            deficienciesHtml = `<div class="problem-card"><div class="problem-title">⚠️ Detected Deficiencies</div><div class="problem-content">${marked.parse(defSectionContent)}</div></div>`;
+          }
+        }
+        
+        // Process solutions into blue cards
+        if(solSectionContent){
+          let solutions = solSectionContent.split(/\n(?=\*\s+\*?\*?(?:Solution|Remediation|Recommendation)\s*\d+[:\-]|For\s+EACH\s+deficiency)/i);
+          
+          if(solutions.length <= 1){
+            solutions = solSectionContent.split(/\n(?=\*)/).filter(line => 
+              line.toLowerCase().includes('solution') || line.toLowerCase().includes('remediation') ||
+              line.toLowerCase().includes('repair method') || line.toLowerCase().includes('required materials'));
           }
           
-          // Create individual solution cards
+          solutions = solutions.map(sol => sol.trim()).filter(sol => sol.length > 30);
+          
           if(solutions.length > 0){
             solutions.forEach((sol, idx) => {
+              let solName = `Solution ${idx + 1}`;
               const nameMatch = sol.match(/(?:Solution|Remediation|Recommendation)\s*\d+[:\-]\s*([^\n(*]+)/i);
-              const solName = nameMatch ? nameMatch[1].trim() : `Solution ${idx + 1}`;
-              output += `<div class="solution-card"><div class="solution-title">🔧 ${solName}</div><div class="solution-content">${marked.parse(sol)}</div></div>`;
+              if(nameMatch) solName = nameMatch[1].trim();
+              const parsedSol = marked.parse(sol);
+              solutionsHtml += `<div class="solution-card"><div class="solution-title">🔧 ${solName}</div><div class="solution-content">${parsedSol}</div></div>`;
             });
           } else {
-            output += `<div class="solution-card"><div class="solution-title">🔧 Remediation Solutions</div><div class="solution-content">${marked.parse(solutionSection)}</div></div>`;
+            solutionsHtml = `<div class="solution-card"><div class="solution-title">🔧 Remediation Solutions</div><div class="solution-content">${marked.parse(solSectionContent)}</div></div>`;
           }
-        } else {
-          // Last resort: render as normal markdown
-          output = marked.parse(text);
         }
       }
       
-      mdEl.innerHTML = output;
+      // Populate sections
+      overviewSection.innerHTML = overviewHtml || '';
+      deficienciesSection.innerHTML = deficienciesHtml || '';
+      solutionsSection.innerHTML = solutionsHtml || '';
+      
+      // Show "View Solution" button if solutions exist
+      if(solutionsHtml && solutionsHtml.trim().length > 0){
+        viewSolutionBtnWrapper.classList.remove('hidden');
+      }
     }
 
     async function toBase64Compressed(file, maxDim=1600, quality=0.85){
