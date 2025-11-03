@@ -42,21 +42,57 @@
     .dd-item{display:block;width:100%;text-align:left;padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.06);color:#cdd3ff;background:transparent;cursor:pointer}
     .dd-item:hover{background:#121a37}
     .results{margin:24px auto;max-width:900px;display:none}
-    .card{background:#0f1428;border:1px solid rgba(255,255,255,.08);border-radius:22px;padding:24px;box-shadow:0 14px 40px rgba(0,0,0,.45)}
+    .card{background:#0f1428;border:1px solid rgba(255,255,255,.08);border-radius:22px;padding:24px;box-shadow:0 14px 40px rgba(0,0,0,.45);overflow-wrap:break-word;word-wrap:break-word;max-width:100%;box-sizing:border-box}
     .meta{display:flex;align-items:center;gap:10px;color:#9aa3da;font-size:13px;margin-bottom:12px}
-    .prose{color:#e8ebff;line-height:1.75;font-size:16px}
+    .prose{color:#e8ebff;line-height:1.75;font-size:16px;overflow-wrap:break-word;word-wrap:break-word;max-width:100%;box-sizing:border-box}
     .prose h1,.prose h2,.prose h3{margin:18px 0 10px;color:#dbe0ff}
-    .prose p{margin:10px 0}
+    .prose p{margin:10px 0;overflow-wrap:break-word;word-wrap:break-word}
     .prose strong{color:#ffffff}
-    .prose ul{padding-left:22px}
-    .prose li{margin:6px 0}
+    .prose ul{padding-left:22px;overflow-wrap:break-word}
+    .prose li{margin:6px 0;overflow-wrap:break-word;word-wrap:break-word}
+    .prose *{max-width:100%;box-sizing:border-box}
     .issue{background:#17110a;border-left:4px solid #ffb020;padding:10px;border-radius:10px;margin:10px 0}
     .rec{background:#0c2130;border-left:4px solid #27c1ff;padding:10px;border-radius:10px;margin:10px 0}
     .footer{margin:40px 0;color:#9aa3da;text-align:center}
     .hidden{display:none}
+    .login-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:radial-gradient(1200px 800px at 10% -10%, rgba(118,75,162,.3), transparent 60%), radial-gradient(1000px 800px at 110% 10%, rgba(102,126,234,.3), transparent 60%), #0c0f1e;display:flex;align-items:center;justify-content:center;z-index:1000}
+    .login-card{background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.04));border:1px solid rgba(255,255,255,.12);border-radius:24px;padding:40px;max-width:420px;width:90%;box-shadow:0 20px 50px rgba(0,0,0,.45)}
+    .login-title{font-size:32px;font-weight:800;background:linear-gradient(90deg,var(--primary),var(--primary2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:0 0 8px;text-align:center}
+    .login-subtitle{color:#b8bde8;text-align:center;margin:0 0 32px;font-size:15px}
+    .login-input{width:100%;background:#0f1428;border:1px solid rgba(255,255,255,.12);border-radius:14px;height:52px;color:#e8ebff;padding:0 18px;font-size:16px;margin-bottom:16px;outline:none}
+    .login-input:focus{outline:2px solid rgba(102,126,234,.4);outline-offset:2px}
+    .login-btn{width:100%;height:52px;border:none;border-radius:14px;background:linear-gradient(90deg,var(--primary),var(--primary2));color:#fff;font-weight:700;cursor:pointer;box-shadow:0 12px 30px rgba(102,126,234,.35);font-size:16px}
+    .login-btn:hover{filter:brightness(1.06)}
+    .main-content{display:none}
+    .main-content.active{display:block}
+    .problem-card{background:#2a1515;border:1px solid #ff4444;border-left:5px solid #ff4444;border-radius:16px;padding:18px;margin:16px 0;box-shadow:0 4px 12px rgba(255,68,68,.2);overflow-wrap:break-word;word-wrap:break-word;max-width:100%;box-sizing:border-box}
+    .problem-title{color:#ff6666;font-weight:700;font-size:18px;margin:0 0 12px}
+    .problem-content{color:#ffaaaa;line-height:1.7;overflow-wrap:break-word;word-wrap:break-word;max-width:100%;word-break:break-word}
+    .problem-card *{max-width:100%;overflow-wrap:break-word;word-wrap:break-word;word-break:break-word}
+    .main-problem{color:#ff4444!important;font-weight:700;background:rgba(255,68,68,.15);padding:4px 8px;border-radius:4px;display:inline-block;margin:4px 0}
+    .potential-consequences{color:#ff6666!important;font-weight:600}
+    .solution-card{background:#0f2330;border:1px solid #27c1ff;border-left:5px solid #27c1ff;border-radius:16px;padding:18px;margin:16px 0;box-shadow:0 4px 12px rgba(39,193,255,.2)}
+    .solution-title{color:#66d9ff;font-weight:700;font-size:18px;margin:0 0 12px}
+    .solution-content{color:#aaddff;line-height:1.7}
+    .logout-btn{position:fixed;top:20px;right:20px;padding:8px 16px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:10px;color:#cdd3ff;font-size:14px;font-weight:500;cursor:pointer;transition:all 0.2s;z-index:100}
+    .logout-btn:hover{background:rgba(255,255,255,.12);color:#ffffff}
+    .download-btn{display:inline-flex;align-items:center;padding:12px 24px;background:linear-gradient(90deg,var(--primary),var(--primary2));color:#fff;border:none;border-radius:12px;font-weight:600;cursor:pointer;box-shadow:0 8px 20px rgba(102,126,234,.3);transition:all 0.2s}
+    .download-btn:hover{filter:brightness(1.1);transform:translateY(-1px);box-shadow:0 10px 24px rgba(102,126,234,.4)}
+    .stage-badge{display:inline-block;padding:6px 12px;background:rgba(102,126,234,.2);border:1px solid rgba(102,126,234,.4);border-radius:8px;color:#9fb0ff;font-size:13px;font-weight:600;margin-left:10px}
   </style>
 </head>
 <body>
+  <div id="loginOverlay" class="login-overlay">
+    <div class="login-card">
+      <h1 class="login-title">ArchScope</h1>
+      <p class="login-subtitle">AI-Powered Building Analysis</p>
+      <input id="loginUser" class="login-input" type="text" placeholder="Username" autocomplete="username"/>
+      <input id="loginPass" class="login-input" type="password" placeholder="Password" autocomplete="current-password"/>
+      <button id="loginBtn" class="login-btn">Sign In</button>
+    </div>
+  </div>
+  <div id="mainContent" class="main-content">
+  <button id="logoutBtn" class="logout-btn">Logout</button>
   <div class="container">
     <div class="center">
     <div class="hero">
@@ -112,13 +148,28 @@
 
     <div id="results" class="results">
       <div class="card" id="resultCard">
-        <div class="meta"><span>Gemini 2.0 Flash</span><span>•</span><span id="ts"></span></div>
+        <div class="meta">
+          <span>Gemini 2.0 Flash</span>
+          <span>•</span>
+          <span id="ts"></span>
+          <span id="stageBadge" class="stage-badge hidden"></span>
+        </div>
         <div id="status" class="sectionTitle hidden">Working…</div>
         <div id="markdown" class="prose"></div>
+        <div id="downloadSection" class="hidden" style="margin-top:24px;padding-top:24px;border-top:1px solid rgba(255,255,255,.1);text-align:center">
+          <button id="downloadBtn" class="download-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right:8px">
+              <path d="M12 15V3m0 0L9 6m3-3l3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M3 15v3a2 2 0 002 2h14a2 2 0 002-2v-3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Download Report
+          </button>
+        </div>
       </div>
     </div>
 
     
+    </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -128,6 +179,58 @@
     const ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
 
     const qs = (s)=>document.querySelector(s);
+    
+    // Login logic
+    const loginOverlay = qs('#loginOverlay');
+    const mainContent = qs('#mainContent');
+    const loginBtn = qs('#loginBtn');
+    const loginUser = qs('#loginUser');
+    const loginPass = qs('#loginPass');
+    
+    // By default, hide main content and show login
+    mainContent.classList.remove('active');
+    
+    // Check if already logged in - if not, show login
+    const isLoggedIn = localStorage.getItem('archscope_logged_in') === 'true';
+    if(isLoggedIn){
+      loginOverlay.style.display = 'none';
+      mainContent.style.display = 'block';
+      mainContent.classList.add('active');
+    } else {
+      // Force show login, hide main content
+      loginOverlay.style.display = 'flex';
+      mainContent.style.display = 'none';
+      mainContent.classList.remove('active');
+    }
+    
+    loginBtn.addEventListener('click',()=>{
+      // Accept any username/password combination
+      localStorage.setItem('archscope_logged_in', 'true');
+      loginOverlay.style.display = 'none';
+      mainContent.style.display = 'block';
+      mainContent.classList.add('active');
+    });
+    
+    loginPass.addEventListener('keydown',(e)=>{
+      if(e.key === 'Enter') loginBtn.click();
+    });
+    
+    loginUser.addEventListener('keydown',(e)=>{
+      if(e.key === 'Enter') loginPass.focus();
+    });
+    
+    // Logout functionality
+    const logoutBtn = qs('#logoutBtn');
+    logoutBtn.addEventListener('click',()=>{
+      localStorage.removeItem('archscope_logged_in');
+      loginOverlay.style.display = 'flex';
+      mainContent.style.display = 'none';
+      mainContent.classList.remove('active');
+      // Clear form fields
+      loginUser.value = '';
+      loginPass.value = '';
+    });
+    
     const queryEl = qs('#query');
     const goEl = qs('#go');
     const fileEl = qs('#file');
@@ -136,6 +239,11 @@
     const statusEl = qs('#status');
     const mdEl = qs('#markdown');
     const tsEl = qs('#ts');
+    const downloadSection = qs('#downloadSection');
+    const downloadBtn = qs('#downloadBtn');
+    const stageBadge = qs('#stageBadge');
+    
+    let currentAnalysisText = '';
 
     // Suggestions dropdown
     const ddBtn = qs('#ddBtn');
@@ -161,6 +269,20 @@
 
     queryEl.addEventListener('keydown',(e)=>{ if(e.key==='Enter'){ e.preventDefault(); goEl.click(); }});
     goEl.addEventListener('click', runAnalysis);
+    
+    downloadBtn.addEventListener('click', ()=>{
+      if(!currentAnalysisText) return;
+      const blob = new Blob([currentAnalysisText], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
+      a.download = `ArchScope_Report_${timestamp}.txt`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
 
     async function runAnalysis(){
       const userQuery = (queryEl.value || '').trim();
@@ -172,6 +294,9 @@
 
       setBusy(true);
       mdEl.innerHTML = '';
+      downloadSection.classList.add('hidden');
+      stageBadge.classList.add('hidden');
+      currentAnalysisText = '';
 
       try{
         const parts = [ { text: buildPrompt(userQuery) } ];
@@ -193,26 +318,64 @@
         const data = await res.json();
 
         const text = data?.candidates?.[0]?.content?.parts?.map(p=>p.text).join('\n') || 'No response.';
+        currentAnalysisText = text;
+        
+        // Extract construction stage from response
+        const stageMatch = text.match(/\*\*?Detected Stage:\*\*?\s*(.+?)(?:\n|$)/i) || 
+                          text.match(/Detected Stage:\s*(.+?)(?:\n|$)/i) ||
+                          text.match(/Stage:\s*(.+?)(?:\n|$)/i);
+        
+        if(stageMatch && stageMatch[1]){
+          const detectedStage = stageMatch[1].trim();
+          stageBadge.textContent = detectedStage;
+          stageBadge.classList.remove('hidden');
+        }
+        
         renderMarkdown(text);
+        downloadSection.classList.remove('hidden');
       }catch(err){
         statusEl.classList.remove('hidden');
         statusEl.textContent = `Error: ${err.message}`;
+        downloadSection.classList.add('hidden');
       }finally{
         setBusy(false);
       }
     }
 
     function buildPrompt(query){
-      return `System: You are an expert building inspector. Use BOTH the user's text and any attached image.\n\n`+
-      `Classify which construction stage best matches (one of: Foundation & Sitework, Framing & Structure, Electrical Systems, Plumbing Systems, Roofing & Insulation, Interior Finishing).\n`+
-      `Output the first line as: Detected Stage: <stage>.\n\n`+
-      `Then provide a detailed analysis with:\n`+
-      `1) Overall Assessment\n`+
-      `2) Detected Deficiencies with severity (Low/Medium/High/Critical)\n`+
-      `3) Remediation Recommendations\n`+
-      `4) Compliance Status (code/safety)\n\n`+
-      `User Emphasis: ${query || 'General stage-specific assessment'}\n`+
-      `Return well-structured sections with clear Markdown headings.`;
+      return `You are a licensed civil/structural engineer performing a technical building inspection. Analyze BOTH the user's text and any attached image.\n\n`+
+      `CRITICAL: Provide SPECIFIC, ACTIONABLE engineering solutions. Do NOT just say "consult a structural engineer" - YOU are the engineer. Give detailed technical recommendations with:\n`+
+      `- Specific measurements, dimensions, and tolerances\n`+
+      `- Material specifications (concrete grade, rebar size, fastener types, etc.)\n`+
+      `- Step-by-step remediation procedures\n`+
+      `- Code references where applicable (IRC, IBC, ACI, etc.)\n`+
+      `- Load calculations if structural issues are identified\n`+
+      `- Construction methods and sequence\n\n`+
+      `Classify which construction stage best matches: Foundation & Sitework, Framing & Structure, Electrical Systems, Plumbing Systems, Roofing & Insulation, Interior Finishing.\n`+
+      `Output the first line as: **Detected Stage:** <stage>\n\n`+
+      `Provide a detailed engineering report with:\n`+
+      `## 1. Overall Assessment\n`+
+      `Technical evaluation of current condition with specific observations.\n\n`+
+      `## 2. Detected Deficiencies (with Severity)\n`+
+      `For each issue:\n`+
+      `- Location and extent (with measurements if visible)\n`+
+      `- Severity: Low/Medium/High/Critical\n`+
+      `- Root cause analysis\n`+
+      `- Potential consequences if unaddressed\n\n`+
+      `## 3. Remediation Solutions\n`+
+      `For EACH deficiency, provide:\n`+
+      `- Specific repair method with step-by-step instructions\n`+
+      `- Required materials (with specifications: sizes, grades, quantities)\n`+
+      `- Tools and equipment needed\n`+
+      `- Estimated dimensions/thickness for repairs\n`+
+      `- Installation sequence and curing times if applicable\n`+
+      `- Cost considerations (material vs labor intensive)\n\n`+
+      `## 4. Compliance & Code Status\n`+
+      `- Code violations identified (cite specific codes: IRC, IBC, NEC, UPC, etc.)\n`+
+      `- Safety concerns with priority ranking\n`+
+      `- Required permits for remediation work\n\n`+
+      `User Query Focus: ${query || 'Comprehensive stage-specific analysis'}\n\n`+
+      `Format response in clear Markdown with headings. Be technical, specific, and actionable.`;
     }
 
     function setBusy(b){
@@ -225,7 +388,253 @@
     }
 
     function renderMarkdown(text){
-      mdEl.innerHTML = marked.parse(text || '');
+      if(!text) return;
+      
+      // Parse text to extract problems and solutions
+      const html = marked.parse(text);
+      let output = '';
+      
+      // Split by major sections (handle both ## and ###)
+      const sectionRegex = /(?:^|\n)(##?\s+[^\n]+)/g;
+      const matches = [...text.matchAll(sectionRegex)];
+      
+      if(matches.length === 0){
+        // No sections found, render as normal
+        output = marked.parse(text);
+      } else {
+        let lastIdx = 0;
+        for(let i = 0; i < matches.length; i++){
+          const match = matches[i];
+          const sectionStart = match.index + match[0].indexOf(match[1]);
+          const sectionEnd = i < matches.length - 1 ? matches[i+1].index : text.length;
+          const sectionText = text.substring(sectionStart, sectionEnd);
+          const title = match[1].replace(/^##?\s+/, '').trim();
+          const content = sectionText.replace(/^##?\s+[^\n]+\n*/, '').trim();
+          
+          // Render everything before first section
+          if(i === 0 && sectionStart > 0){
+            output += marked.parse(text.substring(0, sectionStart));
+          }
+          
+          // Check if this is the deficiencies/problems section
+          if(title.toLowerCase().includes('deficiency') || title.toLowerCase().includes('problem') || title.toLowerCase().includes('issue')){
+            if(content){
+              // Parse deficiencies line by line - look for patterns like "* **Deficiency 1:" or "* Deficiency 1:"
+              const lines = content.split('\n');
+              let deficiencies = [];
+              let currentDef = null;
+              
+              lines.forEach((line) => {
+                const trimmed = line.trim();
+                
+                // Check if this line starts a new deficiency - look for patterns like:
+                // "* **Deficiency 1:", "* Deficiency 1:", "**Deficiency 1:", "Deficiency 1:"
+                const defPattern = /^(?:\*\s*)?\*?\*?(?:Deficiency|Problem|Issue)\s*\d+[:\-]/i;
+                
+                if(defPattern.test(trimmed)){
+                  // Save previous deficiency if exists
+                  if(currentDef){
+                    deficiencies.push(currentDef);
+                  }
+                  // Start new deficiency
+                  currentDef = trimmed;
+                } else if(currentDef){
+                  // Continue adding to current deficiency (all sub-items)
+                  currentDef += '\n' + trimmed;
+                } else if(trimmed.length > 0 && /deficiency|problem|issue|severity|location/i.test(trimmed)){
+                  // Start accumulating if we see deficiency-related content
+                  currentDef = trimmed;
+                }
+              });
+              
+              // Don't forget the last one
+              if(currentDef){
+                deficiencies.push(currentDef);
+              }
+              
+              // Clean and filter - ensure we have actual deficiencies
+              deficiencies = deficiencies.map(def => def.trim()).filter(def => {
+                const lower = def.toLowerCase();
+                return def.length > 30 && (
+                  lower.includes('deficiency') || 
+                  lower.includes('severity') || 
+                  lower.includes('location') ||
+                  lower.includes('root cause')
+                );
+              });
+              
+              if(deficiencies.length > 0){
+                deficiencies.forEach((def, idx) => {
+                  const defContent = def.trim();
+                  if(defContent){
+                    // Extract deficiency name - handle formats like:
+                    // "* **Deficiency 1: Name**" or "Deficiency 1: Name (Severity: X)"
+                    let defName = `Deficiency ${idx + 1}`;
+                    
+                    // Try to extract from first line
+                    const firstLine = defContent.split('\n')[0];
+                    // Match: "* **Deficiency 1: Name**" or "Deficiency 1: Name"
+                    const nameMatch = firstLine.match(/(?:Deficiency|Problem|Issue)\s*\d+[:\-]\s*\*?\*?([^*\n(]+?)\*?\*?/i);
+                    if(nameMatch){
+                      defName = nameMatch[1].trim();
+                      // Remove markdown bold markers if any
+                      defName = defName.replace(/\*\*/g, '').trim();
+                    } else {
+                      // Fallback: try without asterisks
+                      const simpleMatch = firstLine.match(/(?:Deficiency|Problem|Issue)\s*\d+[:\-]\s*([^\n(*]+)/i);
+                      if(simpleMatch){
+                        defName = simpleMatch[1].trim();
+                      }
+                    }
+                    
+                    const parsedDef = marked.parse(defContent);
+                    output += `<div class="problem-card"><div class="problem-title">⚠️ ${defName}</div><div class="problem-content">${parsedDef}</div></div>`;
+                  }
+                });
+              } else {
+                // Fallback: single card if no numbered deficiencies found
+                const parsedContent = marked.parse(content);
+                output += `<div class="problem-card"><div class="problem-title">⚠️ ${title}</div><div class="problem-content">${parsedContent}</div></div>`;
+              }
+            }
+            continue;
+          }
+          
+          // Check if this is the solutions/remediation section
+          if(title.toLowerCase().includes('remediation') || title.toLowerCase().includes('solution') || title.toLowerCase().includes('recommendation')){
+            if(content){
+              // Split into individual solutions - look for numbered solutions or "For EACH deficiency"
+              let solutions = content.split(/\n(?=\*\s+\*?\*?(?:Solution|Remediation|Recommendation)\s*\d+[:\-]|For\s+EACH\s+deficiency)/i);
+              
+              // If no matches, try splitting by bullet points
+              if(solutions.length <= 1){
+                solutions = content.split(/\n(?=\*)/).filter(line => 
+                  line.toLowerCase().includes('solution') || 
+                  line.toLowerCase().includes('remediation') ||
+                  line.toLowerCase().includes('recommendation') ||
+                  line.toLowerCase().includes('repair method') ||
+                  line.toLowerCase().includes('required materials')
+                );
+              }
+              
+              solutions = solutions.map(sol => sol.trim()).filter(sol => sol.length > 30);
+              
+              if(solutions.length > 0){
+                solutions.forEach((sol, idx) => {
+                  const solContent = sol.trim();
+                  if(solContent){
+                    // Extract solution name if available
+                    const nameMatch = solContent.match(/(?:Solution|Remediation|Recommendation)\s*\d+[:\-]\s*([^\n(*]+)/i);
+                    const solName = nameMatch ? nameMatch[1].trim() : `Solution ${idx + 1}`;
+                    const parsedSol = marked.parse(solContent);
+                    output += `<div class="solution-card"><div class="solution-title">🔧 ${solName}</div><div class="solution-content">${parsedSol}</div></div>`;
+                  }
+                });
+              } else {
+                // Fallback: single card if no numbered solutions found
+                const parsedContent = marked.parse(content);
+                output += `<div class="solution-card"><div class="solution-title">🔧 ${title}</div><div class="solution-content">${parsedContent}</div></div>`;
+              }
+            }
+            continue;
+          }
+          
+          // Other sections render normally
+          output += marked.parse(sectionText);
+        }
+      }
+      
+      // Fallback: if no structured parsing worked, try to find problems/solutions in full text
+      if(!output){
+        const lower = text.toLowerCase();
+        const probIdx = lower.indexOf('deficiency') !== -1 ? lower.indexOf('deficiency') : 
+                       lower.indexOf('problem') !== -1 ? lower.indexOf('problem') : -1;
+        const solIdx = lower.indexOf('remediation') !== -1 ? lower.indexOf('remediation') :
+                      lower.indexOf('solution') !== -1 ? lower.indexOf('solution') : -1;
+        
+        if(probIdx !== -1 && solIdx !== -1){
+          const beforeProb = text.substring(0, probIdx);
+          let problemSection = text.substring(probIdx, solIdx);
+          const solutionSection = text.substring(solIdx);
+          
+          // Split problems into individual cards using improved line-by-line parsing
+          const lines = problemSection.split('\n');
+          let deficiencies = [];
+          let currentDef = null;
+          
+          lines.forEach((line) => {
+            const trimmed = line.trim();
+            const defPattern = /^(?:\*\s*)?\*?\*?(?:Deficiency|Problem|Issue)\s*\d+[:\-]/i;
+            
+            if(defPattern.test(trimmed)){
+              if(currentDef) deficiencies.push(currentDef);
+              currentDef = trimmed;
+            } else if(currentDef){
+              currentDef += '\n' + trimmed;
+            } else if(trimmed.length > 0 && /deficiency|problem|issue|severity|location/i.test(trimmed)){
+              currentDef = trimmed;
+            }
+          });
+          
+          if(currentDef) deficiencies.push(currentDef);
+          
+          deficiencies = deficiencies.map(def => def.trim()).filter(def => {
+            const lower = def.toLowerCase();
+            return def.length > 30 && (
+              lower.includes('deficiency') || 
+              lower.includes('severity') || 
+              lower.includes('location') ||
+              lower.includes('root cause')
+            );
+          });
+          
+          // Split solutions into individual cards
+          let solutions = solutionSection.split(/\n(?=\*\s+\*?\*?(?:Solution|Remediation|Recommendation)\s*\d+[:\-])/i);
+          if(solutions.length <= 1){
+            solutions = solutionSection.split(/\n(?=\*)/).filter(line => 
+              line.toLowerCase().includes('solution') || line.toLowerCase().includes('remediation'));
+          }
+          solutions = solutions.map(sol => sol.trim()).filter(sol => sol.length > 30);
+          
+          output += marked.parse(beforeProb);
+          
+          // Create individual problem cards
+          if(deficiencies.length > 0){
+            deficiencies.forEach((def, idx) => {
+              let defName = `Deficiency ${idx + 1}`;
+              const firstLine = def.split('\n')[0];
+              const nameMatch = firstLine.match(/(?:Deficiency|Problem|Issue)\s*\d+[:\-]\s*\*?\*?([^*\n(]+?)\*?\*?/i);
+              if(nameMatch){
+                defName = nameMatch[1].trim().replace(/\*\*/g, '').trim();
+              } else {
+                const simpleMatch = firstLine.match(/(?:Deficiency|Problem|Issue)\s*\d+[:\-]\s*([^\n(*]+)/i);
+                if(simpleMatch){
+                  defName = simpleMatch[1].trim();
+                }
+              }
+              output += `<div class="problem-card"><div class="problem-title">⚠️ ${defName}</div><div class="problem-content">${marked.parse(def)}</div></div>`;
+            });
+          } else {
+            output += `<div class="problem-card"><div class="problem-title">⚠️ Detected Deficiencies</div><div class="problem-content">${marked.parse(problemSection)}</div></div>`;
+          }
+          
+          // Create individual solution cards
+          if(solutions.length > 0){
+            solutions.forEach((sol, idx) => {
+              const nameMatch = sol.match(/(?:Solution|Remediation|Recommendation)\s*\d+[:\-]\s*([^\n(*]+)/i);
+              const solName = nameMatch ? nameMatch[1].trim() : `Solution ${idx + 1}`;
+              output += `<div class="solution-card"><div class="solution-title">🔧 ${solName}</div><div class="solution-content">${marked.parse(sol)}</div></div>`;
+            });
+          } else {
+            output += `<div class="solution-card"><div class="solution-title">🔧 Remediation Solutions</div><div class="solution-content">${marked.parse(solutionSection)}</div></div>`;
+          }
+        } else {
+          // Last resort: render as normal markdown
+          output = marked.parse(text);
+        }
+      }
+      
+      mdEl.innerHTML = output;
     }
 
     async function toBase64Compressed(file, maxDim=1600, quality=0.85){
